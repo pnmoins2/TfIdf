@@ -23,64 +23,64 @@ public class WordCountMapper extends Mapper<LongWritable, Text, Text, IntWritabl
 	@SuppressWarnings("unchecked")
 	@Override
 	protected void map(LongWritable keyE, Text valE, Context context) throws IOException,InterruptedException
-    {	
+    	{	
 		// Recover the line
-        String line = valE.toString();
+		String line = valE.toString();
+
+		// Split the line
+		StringTokenizer tokenizer = new StringTokenizer(line);
+
+		// Initiate the hash map [word --> wordCount]
+		Map<String, Integer> h = new HashMap<>();
+
+		// For each word of the line
+		while (tokenizer.hasMoreTokens())
+		{
+			// Recover the current word
+			String currentWord = tokenizer.nextToken();
+
+			String regex = "(\\.|-|,|;|\\!|\\?|\'|\"|\\\\|\\(|\\))+";
+			currentWord = currentWord.replaceAll("^"+regex,"");
+			currentWord = currentWord.replaceAll(regex+"$","");
+
+			// Increase the wordCount in the hash map
+			if (!currentWord.isEmpty())
+			{
+				if (h.containsKey(currentWord))
+				{
+					h.put(currentWord, h.get(currentWord) + 1);
+				}
+				else
+				{
+					h.put(currentWord, 1);
+				}
+			}
+		}
         
-        // Split the line
-        StringTokenizer tokenizer = new StringTokenizer(line);
-        
-        // Initiate the hash map [word --> wordCount]
-        Map<String, Integer> h = new HashMap<>();
-        
-        // For each word of the line
-        while (tokenizer.hasMoreTokens())
-        {
-        	// Recover the current word
-        	String currentWord = tokenizer.nextToken();
-        	
-        	String regex = "(\\.|-|,|;|\\!|\\?|\'|\"|\\\\|\\(|\\))+";
-        	currentWord = currentWord.replaceAll("^"+regex,"");
-        	currentWord = currentWord.replaceAll(regex+"$","");
-        	
-        	// Increase the wordCount in the hash map
-        	if (!currentWord.isEmpty())
-        	{
-	        	if (h.containsKey(currentWord))
-	        	{
-	        		h.put(currentWord, h.get(currentWord) + 1);
-	        	}
-	        	else
-	        	{
-	        		h.put(currentWord, 1);
-	        	}
-        	}
-        }
-        
-        // For each element of the hash map
-        java.util.Set<Entry<String, Integer>> setH = h.entrySet();
-        Iterator<Entry<String, Integer>> iterator = setH.iterator();
-        while(iterator.hasNext()){
-        	// Recover the docId
-        	FileSplit split = (FileSplit) context.getInputSplit();
-        	String[] filenameSplit = split.getPath().toString().split("/");
-        	String filename = filenameSplit[filenameSplit.length -1];
-        	
-        	// Recover the current [word --> wordCount]
-        	Entry<String, Integer> e = iterator.next();
-           
-        	// Output Key
-        	docIdAndWordObject.put("docId", filename);
-        	docIdAndWordObject.put("word", e.getKey());
-        
-        	// Convert the JSON Object to a JSON string
-        	docIdAndWordText.set(docIdAndWordObject.toJSONString());
-        	
-        	// Output Value
-        	integer.set(e.getValue());
-           
-        	// Output
-        	context.write(docIdAndWordText, integer);
-        }
-    }
+		// For each element of the hash map
+		java.util.Set<Entry<String, Integer>> setH = h.entrySet();
+		Iterator<Entry<String, Integer>> iterator = setH.iterator();
+		while(iterator.hasNext()){
+			// Recover the docId
+			FileSplit split = (FileSplit) context.getInputSplit();
+			String[] filenameSplit = split.getPath().toString().split("/");
+			String filename = filenameSplit[filenameSplit.length -1];
+
+			// Recover the current [word --> wordCount]
+			Entry<String, Integer> e = iterator.next();
+
+			// Output Key
+			docIdAndWordObject.put("docId", filename);
+			docIdAndWordObject.put("word", e.getKey());
+
+			// Convert the JSON Object to a JSON string
+			docIdAndWordText.set(docIdAndWordObject.toJSONString());
+
+			// Output Value
+			integer.set(e.getValue());
+
+			// Output
+			context.write(docIdAndWordText, integer);
+		}
+    	}
 }
