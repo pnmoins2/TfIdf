@@ -67,7 +67,7 @@ public class Conductor {
 		
 		// Fifth Step : Display the first 20 values
 		// Recover the Output  Location
-		String outputFile = "/user/cloudera/" + sortArgs[1] + "/part-r-00000";
+		String outputFile = sortArgs[1] + "/part-r-00000";
 		Path path = new Path(outputFile);
 		// Open the file
 		FSDataInputStream in = fs.open(path);
