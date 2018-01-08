@@ -20,34 +20,34 @@ public class WordCountPerDocMapper extends Mapper<Text, Text, Text, Text> {
 	@SuppressWarnings("unchecked")
 	@Override
 	protected void map(Text keyE, Text valE, Context context) throws IOException,InterruptedException
-    {
+   	{
 		// Initiate the local variables
-        Long wordCount = Long.parseLong(valE.toString());
-        JSONObject docIdAndWord;
-        
-        try {
-        	// Convert the JSON string to a JSON object
-	        docIdAndWord = (JSONObject) this.parser.parse(keyE.toString());
-	        
-	        // Recover the information within the JSON
-	        String docIdString = (String) docIdAndWord.get("docId");
-	        String word = (String) docIdAndWord.get("word");
-	        
-	        // Output value
-	        wordAndWordCountObject.put("word", word);
-	        wordAndWordCountObject.put("wordCount", wordCount);
-	        
-	        // Convert the JSON object to a JSON string
-	        wordAndWordCountText.set(wordAndWordCountObject.toJSONString());
-	        
-	        // Output key
-	        docIdText.set(docIdString);
-	           
-	        // Output
-	        context.write(docIdText, wordAndWordCountText);
-        } catch (ParseException e) {
-    		// TODO Auto-generated catch block
-    		e.printStackTrace();
+		Long wordCount = Long.parseLong(valE.toString());
+		JSONObject docIdAndWord;
+
+		try {
+			// Convert the JSON string to a JSON object
+			docIdAndWord = (JSONObject) this.parser.parse(keyE.toString());
+
+			// Recover the information within the JSON
+			String docIdString = (String) docIdAndWord.get("docId");
+			String word = (String) docIdAndWord.get("word");
+
+			// Output value
+			wordAndWordCountObject.put("word", word);
+			wordAndWordCountObject.put("wordCount", wordCount);
+
+			// Convert the JSON object to a JSON string
+			wordAndWordCountText.set(wordAndWordCountObject.toJSONString());
+
+			// Output key
+			docIdText.set(docIdString);
+
+			// Output
+			context.write(docIdText, wordAndWordCountText);
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
     	}
-    }
 }
