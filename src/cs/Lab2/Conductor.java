@@ -9,7 +9,7 @@ import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
 
 import cs.Lab2.WordCount.WordCount;
-import cs.Lab2.WordCountPerDoc.MatrixBuilding;
+import cs.Lab2.WordCountPerDoc.WordCountPerDoc;
 import cs.Lab2.Sort.Sort;
 import cs.Lab2.TfIdf.TfIdf;
 
@@ -45,7 +45,7 @@ public class Conductor {
 		wordCountDriver.run(wordCountArgs);
 		
 		// Second Step : WordCountPerDoc
-		MatrixBuilding wordCountPerDocDriver = new MatrixBuilding(conf);
+		WordCountPerDoc wordCountPerDocDriver = new WordCountPerDoc(conf);
 		String[] wordCountPerDocArgs = new String[2];
 		wordCountPerDocArgs[0] = wordCountArgs[1];
 		wordCountPerDocArgs[1] = globalOutput + wordCountPerDocOutput;
