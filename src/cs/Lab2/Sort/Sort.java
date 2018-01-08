@@ -23,79 +23,79 @@ public class Sort extends Configured implements Tool {
 		this.conf = conf;
 	}
 	
-    public int run(String[] args) throws Exception {
-    	if (args.length != 2) {
+    	public int run(String[] args) throws Exception {
+		if (args.length != 2) {
 
-            System.out.println("Usage: [input] [output]");
+		    System.out.println("Usage: [input] [output]");
 
-            System.exit(-1);
+		    System.exit(-1);
 
-        }
-    	
-        // Création d'un job en lui fournissant la configuration et une description textuelle de la tâche
+		}
 
-        Job job = Job.getInstance(conf);
+		// Création d'un job en lui fournissant la configuration et une description textuelle de la tâche
 
-        job.setJobName("Sort");
-        
-        // On précise le format des fichiers d'entrée et de sortie
-        
-        job.setInputFormatClass(KeyValueTextInputFormat.class);
+		Job job = Job.getInstance(conf);
+
+		job.setJobName("Sort");
+
+		// On précise le format des fichiers d'entrée et de sortie
+
+		job.setInputFormatClass(KeyValueTextInputFormat.class);
 		job.setOutputFormatClass(TextOutputFormat.class);
 
-        // On précise les classes MyProgram, Map et Reduce
+		// On précise les classes MyProgram, Map et Reduce
 
-        job.setJarByClass(Sort.class);
+		job.setJarByClass(Sort.class);
 
-        job.setMapperClass(SortMapper.class);
+		job.setMapperClass(SortMapper.class);
 
-        job.setReducerClass(SortReducer.class);
-
-
-        // Définition des types clé/valeur de notre problème
-
-        job.setMapOutputKeyClass(FloatWritable.class);
-
-        job.setMapOutputValueClass(Text.class);
+		job.setReducerClass(SortReducer.class);
 
 
-        job.setOutputKeyClass(Text.class);
+		// Définition des types clé/valeur de notre problème
 
-        job.setOutputValueClass(FloatWritable.class);
+		job.setMapOutputKeyClass(FloatWritable.class);
+
+		job.setMapOutputValueClass(Text.class);
 
 
-        // Définition des fichiers d'entrée et de sorties (ici considérés comme des arguments à préciser lors de l'exécution)
+		job.setOutputKeyClass(Text.class);
 
-        Path inputFilePath = new Path(args[0]);
-    	FileInputFormat.addInputPath(job, inputFilePath);
+		job.setOutputValueClass(FloatWritable.class);
+
+
+		// Définition des fichiers d'entrée et de sorties (ici considérés comme des arguments à préciser lors de l'exécution)
+
+		Path inputFilePath = new Path(args[0]);
+		FileInputFormat.addInputPath(job, inputFilePath);
+
+		Path outputFilePath = new Path(args[1]);
+		FileOutputFormat.setOutputPath(job, outputFilePath);
+
+
+		//Suppression du fichier de sortie s'il existe déjà
+
+		FileSystem fs = FileSystem.newInstance(conf);
+
+		if (fs.exists(outputFilePath)) {
+		    fs.delete(outputFilePath, true);
+		}
+
+
+		return job.waitForCompletion(true) ? 0: 1;
+
+    	}
+
+
+    	public static void main(String[] args) throws Exception {
+    		Configuration config = new Configuration();
     	
-        Path outputFilePath = new Path(args[1]);
-        FileOutputFormat.setOutputPath(job, outputFilePath);
-
-
-        //Suppression du fichier de sortie s'il existe déjà
-
-        FileSystem fs = FileSystem.newInstance(conf);
-
-        if (fs.exists(outputFilePath)) {
-            fs.delete(outputFilePath, true);
-        }
-
-
-        return job.waitForCompletion(true) ? 0: 1;
-
-    }
-
-
-    public static void main(String[] args) throws Exception {
-    	Configuration config = new Configuration();
-    	
-        Sort sortDriver = new Sort(config);
+        	Sort sortDriver = new Sort(config);
         
-        int res = ToolRunner.run(sortDriver, args);
+        	int res = ToolRunner.run(sortDriver, args);
 
-        System.exit(res);
+        	System.exit(res);
 
-    }
+    	}
 
 }
