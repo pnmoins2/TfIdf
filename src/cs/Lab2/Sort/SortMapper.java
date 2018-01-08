@@ -13,11 +13,11 @@ public class SortMapper extends Mapper<Text, Text, FloatWritable, Text> {
 	// Output : (-tfIdf, [word, docId])
 	@Override
 	protected void map(Text keyE, Text valE, Context context) throws IOException,InterruptedException
-    {		
+    	{		
 		// Recover the tfIdf
 		float tfIdf = Float.parseFloat(valE.toString());
 		
 		minusTfIdf.set(-tfIdf);
 		context.write(minusTfIdf, keyE);
-    }
+    	}
 }
