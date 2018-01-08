@@ -20,38 +20,38 @@ public class TfIdfMapper extends Mapper<Text, Text, Text, Text> {
 	@SuppressWarnings("unchecked")
 	@Override
 	protected void map(Text keyE, Text valE, Context context) throws IOException,InterruptedException
-    {		
+    	{		
 		// Initiate the local variables
-        JSONObject docIdAndWord;
-        JSONObject wordCountAndWordsPerDoc;
-        
-        try {
-        	// Convert the JSON strings to JSON objects
-	        docIdAndWord = (JSONObject) this.parser.parse(keyE.toString());
-	        wordCountAndWordsPerDoc = (JSONObject) this.parser.parse(valE.toString());
-	        
-	        // Recover the different elements
-	        String docId = (String) docIdAndWord.get("docId");
-	        String wordString = (String) docIdAndWord.get("word");
-	        Long wordCount = (Long) wordCountAndWordsPerDoc.get("wordCount");
-	        Long wordsPerDoc = (Long) wordCountAndWordsPerDoc.get("wordsPerDoc");
-	        
-	        // Output Key
-	        wordText.set(wordString);
-	        
-	        // Output Value
-	        docIdWordCountAndWordsPerDocObject.put("docId", docId);
-	        docIdWordCountAndWordsPerDocObject.put("wordCount", wordCount);
-	        docIdWordCountAndWordsPerDocObject.put("wordsPerDoc", wordsPerDoc);
-	        
-	        // Convert the JSON output to a JSON string
-	        docIdWordCountAndWordsPerDocText.set(docIdWordCountAndWordsPerDocObject.toJSONString());
-	        
-	        // Output
-	        context.write(wordText, docIdWordCountAndWordsPerDocText);
-        } catch (ParseException e) {
-    		// TODO Auto-generated catch block
-    		e.printStackTrace();
+		JSONObject docIdAndWord;
+		JSONObject wordCountAndWordsPerDoc;
+
+		try {
+			// Convert the JSON strings to JSON objects
+			docIdAndWord = (JSONObject) this.parser.parse(keyE.toString());
+			wordCountAndWordsPerDoc = (JSONObject) this.parser.parse(valE.toString());
+
+			// Recover the different elements
+			String docId = (String) docIdAndWord.get("docId");
+			String wordString = (String) docIdAndWord.get("word");
+			Long wordCount = (Long) wordCountAndWordsPerDoc.get("wordCount");
+			Long wordsPerDoc = (Long) wordCountAndWordsPerDoc.get("wordsPerDoc");
+
+			// Output Key
+			wordText.set(wordString);
+
+			// Output Value
+			docIdWordCountAndWordsPerDocObject.put("docId", docId);
+			docIdWordCountAndWordsPerDocObject.put("wordCount", wordCount);
+			docIdWordCountAndWordsPerDocObject.put("wordsPerDoc", wordsPerDoc);
+
+			// Convert the JSON output to a JSON string
+			docIdWordCountAndWordsPerDocText.set(docIdWordCountAndWordsPerDocObject.toJSONString());
+
+			// Output
+			context.write(wordText, docIdWordCountAndWordsPerDocText);
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
     	}
-    }
 }
