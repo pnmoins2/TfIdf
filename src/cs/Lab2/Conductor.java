@@ -23,11 +23,11 @@ public class Conductor {
 	public static void main(String[] args) throws Exception {
 		if (args.length != 2) {
 
-            System.out.println("Usage: [input] [output]");
+        		System.out.println("Usage: [input] [output]");
 
-            System.exit(-1);
+            		System.exit(-1);
 
-        }
+        	}
 		
 		FileSystem fs = FileSystem.newInstance(conf);
 		
