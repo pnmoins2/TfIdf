@@ -23,80 +23,80 @@ public class TfIdf extends Configured implements Tool {
 		this.conf = conf;
 	}
 	
-    public int run(String[] args) throws Exception {
-    	if (args.length != 2) {
+    	public int run(String[] args) throws Exception {
+		if (args.length != 2) {
 
-            System.out.println("Usage: [input] [output]");
+		    System.out.println("Usage: [input] [output]");
 
-            System.exit(-1);
+		    System.exit(-1);
 
-        }
-    	
-        // Création d'un job en lui fournissant la configuration et une description textuelle de la tâche
+		}
 
-        Job job = Job.getInstance(conf);
+		// Création d'un job en lui fournissant la configuration et une description textuelle de la tâche
 
-        job.setJobName("TfIdf");
-        
-        // On précise le format des fichiers d'entrée et de sortie
-        
-        job.setInputFormatClass(KeyValueTextInputFormat.class);
-		job.setOutputFormatClass(TextOutputFormat.class);
+		Job job = Job.getInstance(conf);
 
-        // On précise les classes MyProgram, Map et Reduce
+		job.setJobName("TfIdf");
 
-        job.setJarByClass(TfIdf.class);
+		// On précise le format des fichiers d'entrée et de sortie
 
-        job.setMapperClass(TfIdfMapper.class);
+		job.setInputFormatClass(KeyValueTextInputFormat.class);
+			job.setOutputFormatClass(TextOutputFormat.class);
 
-        job.setReducerClass(TfIdfReducer.class);
+		// On précise les classes MyProgram, Map et Reduce
 
+		job.setJarByClass(TfIdf.class);
 
-        // Définition des types clé/valeur de notre problème
+		job.setMapperClass(TfIdfMapper.class);
 
-        job.setMapOutputKeyClass(Text.class);
-
-        job.setMapOutputValueClass(Text.class);
+		job.setReducerClass(TfIdfReducer.class);
 
 
-        job.setOutputKeyClass(Text.class);
+		// Définition des types clé/valeur de notre problème
 
-        job.setOutputValueClass(FloatWritable.class);
+		job.setMapOutputKeyClass(Text.class);
 
-
-        // Définition des fichiers d'entrée et de sorties (ici considérés comme des arguments à préciser lors de l'exécution)
-
-        Path inputFilePath = new Path(args[0]);
-    	FileInputFormat.addInputPath(job, inputFilePath);
-    	
-        Path outputFilePath = new Path(args[1]);
-        FileOutputFormat.setOutputPath(job, outputFilePath);
+		job.setMapOutputValueClass(Text.class);
 
 
-        //Suppression du fichier de sortie s'il existe déjà
+		job.setOutputKeyClass(Text.class);
 
-        FileSystem fs = FileSystem.newInstance(conf);
-
-        if (fs.exists(outputFilePath)) {
-            fs.delete(outputFilePath, true);
-        }
+		job.setOutputValueClass(FloatWritable.class);
 
 
-        return job.waitForCompletion(true) ? 0: 1;
+		// Définition des fichiers d'entrée et de sorties (ici considérés comme des arguments à préciser lors de l'exécution)
 
-    }
+		Path inputFilePath = new Path(args[0]);
+		FileInputFormat.addInputPath(job, inputFilePath);
+
+		Path outputFilePath = new Path(args[1]);
+		FileOutputFormat.setOutputPath(job, outputFilePath);
 
 
-    public static void main(String[] args) throws Exception {
-    	Configuration config = new Configuration();
-    	config.setInt("numberOfDocuments", 2);
-    	
-        TfIdf tfIdfDriver = new TfIdf(config);
-        
-        int res = ToolRunner.run(tfIdfDriver, args);
+		//Suppression du fichier de sortie s'il existe déjà
 
-        System.exit(res);
+		FileSystem fs = FileSystem.newInstance(conf);
 
-    }
+		if (fs.exists(outputFilePath)) {
+		    fs.delete(outputFilePath, true);
+		}
+
+
+		return job.waitForCompletion(true) ? 0: 1;
+
+    	}
+
+
+    	public static void main(String[] args) throws Exception {
+		Configuration config = new Configuration();
+		config.setInt("numberOfDocuments", 2);
+
+		TfIdf tfIdfDriver = new TfIdf(config);
+
+		int res = ToolRunner.run(tfIdfDriver, args);
+
+		System.exit(res);
+
+    	}
 
 }
