@@ -1,0 +1,40 @@
+---- 20 words with the highest tfIdf ----
+
+{"word":"Buck","docId":"callwild"}			0.006761773
+
+{"word":"dogs","docId":"callwild"}			0.0024429632
+
+{"word":"Thornton","docId":"callwild"}			0.0017449736
+
+{"word":"myself","docId":"defoe-robinson-103.txt"}	0.0016665348
+
+{"word":"Spitz","docId":"callwild"}			0.0013087302
+
+{"word":"sled","docId":"callwild"}			0.0013087302
+
+{"word":"Francois","docId":"callwild"}			0.0011342329
+
+{"word":"Friday","docId":"defoe-robinson-103.txt"}	0.0010216086
+{"word":"Buck's","docId":"callwild"}			0.0010033599
+
+{"word":"John","docId":"callwild"}			8.506747E-4
+
+{"word":"trail","docId":"callwild"}			8.2886254E-4
+
+{"word":"Perrault","docId":"callwild"}			8.070503E-4
+
+{"word":"Hal","docId":"callwild"}			6.543651E-4
+
+{"word":"team","docId":"callwild"}			6.543651E-4
+
+{"word":"thoughts","docId":"defoe-robinson-103.txt"}	6.335115E-4
+
+{"word":"ice","docId":"callwild"}			6.107408E-4
+
+{"word":"traces","docId":"callwild"}			6.107408E-4
+
+{"word":"around","docId":"callwild"}			5.671164E-4
+
+{"word":"Sol-leks","docId":"callwild"}			5.671164E-4
+
+{"word":"Dave","docId":"callwild"}			5.234921E-4
